@@ -3,7 +3,7 @@ import { createUseStyles } from 'react-jss'
 import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { createIsFavouritedSelector } from '../selectors'
-import { toggleFavouriteActionCreator } from '../actions'
+import { toggleFavouriteActionCreator, removeFavoriteActionCreator } from '../actions'
 import theme from '../style/theme'
 import { ReactComponent as FacebookIcon } from '../icons/facebook.svg'
 import { ReactComponent as TwitterIcon } from '../icons/twitter.svg'
@@ -30,7 +30,9 @@ const ShareButtons = ({ children, className, id, url, title }) => {
   const toggleFavourited = useCallback(() => {
     dispatch(toggleFavouriteActionCreator(id))
   }, [id])
-
+  const removeFavourites = useCallback(() => {
+    dispatch(removeFavoriteActionCreator(id))
+  }, [id])
   const social = useMemo(() => [{
     ...popupWindowProps(`https://facebook.com/sharer.php?u=${encodeURIComponent(url)}&t=${encodeURIComponent(title)}`),
     Icon: FacebookIcon,
@@ -49,10 +51,10 @@ const ShareButtons = ({ children, className, id, url, title }) => {
           <span className='sr-only'>{text}</span>
         </a>
       )}
-      <button className={classNames(classes.socialLink, classes.favouriteButton)} type='button' onClick={toggleFavourited}>
+      <button className={classNames(classes.socialLink, classes.favouriteButton)} type='button' onClick={isFavourited ? removeFavourites : toggleFavourited}>
         <span className={classNames(classes.favouriteIconHolder, isFavourited && classes.favouritedIconHolder, !isFavourited && classes.unfavouritedIconHolder)}>
-          <HeartIcon className={classNames(classes.favouriteIcon, classes.fullHeartIcon)} />
-          <EmptyHeartIcon className={classNames(classes.favouriteIcon, classes.emptyHeartIcon)} />
+          {isFavourited && <HeartIcon className={classNames(classes.favouriteIcon)} />}
+          {!isFavourited && <EmptyHeartIcon className={classNames(classes.favouriteIcon)} />}
         </span>
       </button>
       {children}

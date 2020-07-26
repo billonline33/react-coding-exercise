@@ -1,23 +1,25 @@
 import React from 'react'
 import { createUseStyles } from 'react-jss'
 import { useSelector } from 'react-redux'
-import { getEvents, isEventsReady } from '../selectors'
+import { getEvents, isEventsReady, getEventsError } from '../selectors'
 import { ReactComponent as TitleIcon } from '../icons/vivid-angle-top-left.svg'
 import theme from '../style/theme'
 import Event from './Event'
+import Spinner from './Spinner'
 
 const Events = () => {
   const classes = useStyles()
   const ready = useSelector(isEventsReady)
   const events = useSelector(getEvents)
-
+  const eventsError = useSelector(getEventsError)
   return (
     <div className={classes.container}>
       <h3 className={classes.title}>
         <TitleIcon className={classes.titleIcon} />
-        Results
+        Results: {ready && events.length > 0 ? events.length + ' Events Found' : ''}
       </h3>
-      {!ready && <p>Loading...</p>}
+      {!ready && !eventsError && <Spinner />}
+      {!ready && eventsError && <p>Events not found</p>}
       {ready && (
         <div className={classes.tilesWrapper}>
           <div className={classes.tiles}>

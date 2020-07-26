@@ -1,5 +1,6 @@
 const initialState = {
-  eventsApi: process.env.CLIENT_EVENTS_API_URL
+  eventsApi: process.env.CLIENT_EVENTS_API_URL,
+  favoritesApi: process.env.CLIENT_FAVORITES_API_URL
 }
 
 const config = (state = initialState, action) => {
